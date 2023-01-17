@@ -12,11 +12,18 @@ export const getTasks = async (req: any, res: any) => {
 
 //create a new task
 export const createTask = async (req: any, res: any) => {
-  const task = req.body;
-  const newTask = new CreateTask(task);
+  const {task, day, reminder} = req.body;
+  console.log(task);
+
   try {
-    await newTask.save();
-    res.status(201).json(newTask);
+    const newTask = await CreateTask.create({
+        task: req.body.task,
+        day: req.body.day,
+        reminder: req.body.reminder,
+    });
+    let createdTask = await newTask.save();
+    res.status(201).json(createdTask);
+    console.log(createdTask);
   } catch (error: any) {
     res.status(409).json({ error: error.message });
   }

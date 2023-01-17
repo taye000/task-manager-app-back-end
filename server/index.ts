@@ -7,6 +7,7 @@ import taskRoutes from "../routes/tasks";
 
 const app = express();
 
+app.use(express.json());
 app.use("/tasks", taskRoutes);
 
 app.use(bodyParser.json());
