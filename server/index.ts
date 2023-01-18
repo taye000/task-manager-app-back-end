@@ -8,11 +8,15 @@ import taskRoutes from "../routes/tasks";
 const app = express();
 
 app.use(express.json());
-app.use("/tasks", taskRoutes);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+app.use("/tasks", taskRoutes);
 
 const mongodburi: any = process.env.MONGODBURI!;
 
