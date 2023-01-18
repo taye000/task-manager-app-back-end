@@ -1,4 +1,5 @@
 import CreateTask from "../models/createTask";
+import validator from "validator";
 
 //fetch tasks
 export const getTasks = async (req: any, res: any) => {
@@ -23,14 +24,18 @@ export const getTaskbyId = async (req: any, res: any) => {
 
 //create a new task
 export const createTask = async (req: any, res: any) => {
-  const { task, day, reminder } = req.body;
+  const task = req.body.text;
+  const day = req.body.day;
+  const reminder = req.body.reminder;
+  if (validator.isEmpty(task)) {
+    return res.status(400).json({ task: "task is required" });
+  }
+  if (validator.isEmpty(day)) {
+    return res.status(400).json({ day: "day is required" });
+  }
 
   try {
-    const newTask = await CreateTask.create({
-      task: req.body.task,
-      day: req.body.day,
-      reminder: req.body.reminder,
-    });
+    const newTask = await CreateTask.create({ task, day, reminder });
     let createdTask = await newTask.save();
     res.status(201).json(createdTask);
     console.log(createdTask);
